@@ -1,15 +1,18 @@
 import User from "../models/user.module.js";
-import bycrpt from "bcryptjs";
+import bcrypt from "bcryptjs";
 import generateTokenAndSetCookies from "../utils/GenerateJwt.js";
 export const login = async (req, res) => {
   try {
     const { username, password } = req.body;
     const user = await User.findOne({ username });
-    const IsPasswordCorrect = await bycrpt.compare(
+    if (!user) {
+      return res.status(400).json({ error: "invalid username or password" });
+    }
+    const isPasswordCorrect = await bcrypt.compare(
       password,
-      user.password || ""
+      user?.password || ""
     );
-    if (!user || !IsPasswordCorrect) {
+    if (!user || !isPasswordCorrect) {
       return res.status(400).json({ error: "invalid username or password" });
     }
     generateTokenAndSetCookies(user._id, res);
@@ -28,14 +31,15 @@ export const signup = async (req, res) => {
   try {
     const { fullname, username, password, confirmpassword, gender } = req.body;
     if (password !== confirmpassword) {
+      console.log(password, confirmpassword);
       res.status(400).json({ error: "password don't match" });
     }
     const user = await User.findOne({ username });
     if (user) {
       res.status(400).json({ error: "username already exists" });
     }
-    const salt = await bycrpt.genSalt(10);
-    const hashpassword = await bycrpt.hash(password, salt);
+    const salt = await bcrypt.genSalt(10);
+    const hashpassword = await bcrypt.hash(password, salt);
     //boy profile image
     const boyProfile = `https://avatar.iran.liara.run/public/boy?username=${username}`;
     const girlProfile = `https://avatar.iran.liara.run/public/girl?username=${username}`;

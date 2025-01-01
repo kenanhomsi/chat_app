@@ -1,5 +1,26 @@
+import { useState } from "react"
+import { Link } from "react-router-dom"
+import useLogin from "../hooks/useLogin"
 
 const Login = () => {
+    const { loading, login } = useLogin()
+    const [loginInputs, setloginInputs] = useState({
+        username: '',
+        password: ''
+    })
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setloginInputs({
+            ...loginInputs,
+            [e.target.name]: e.target.value
+        })
+    }
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        await login({
+            username: loginInputs.username,
+            password: loginInputs.password
+        })
+    }
     return (
         <div className=" flex flex-col items-center justify-center min-w-96 mx-auto">
 
@@ -8,24 +29,28 @@ const Login = () => {
                     Login
                     <span className="  text-blue-500"> ChatApp</span>
                 </h1>
-                <form >
+                <form onSubmit={handleSubmit} >
                     <div className="">
                         <label className="label p-2">
                             <span className=" text-base label-text">userName</span>
                         </label>
-                        <input type="text" placeholder="enter username" className="w-full input  input-bordered h-10" />
+                        <input name="username" value={loginInputs.username} onChange={handleInputChange} type="text" placeholder="enter username" className="w-full input  input-bordered h-10" />
                     </div>
                     <div className="">
                         <label className="label p-2">
                             <span className=" text-base label-text">Password</span>
                         </label>
-                        <input type="text" placeholder="enter password" className="w-full input  input-bordered h-10" />
+                        <input name="password" value={loginInputs.password} onChange={handleInputChange} type="password" placeholder="enter password" className="w-full input  input-bordered h-10" />
                     </div>
-                    <a href="#" className=" text-sm hover:underline hover:text-blue-600 mt-2 inline-block">
+                    <Link to='/signup' className=" text-sm hover:underline hover:text-blue-600 mt-2 inline-block">
                         {"Don't"} have an account?
-                    </a>
+                    </Link>
                     <div className="">
-                        <button className="btn btn-block btn-sm  mt-2">Login</button>
+                        <button className="btn btn-block btn-sm  mt-2" disabled={loading}>
+                            {
+                                loading ? <span className=" loading loading-spinner"></span> : 'Login'
+                            }
+                        </button>
                     </div>
                 </form>
             </div>
