@@ -21,7 +21,7 @@ export const SocketContextProvider = ({ children }: { children: React.ReactNode 
 
     useEffect(() => {
         if (authUser) {
-            const socket = io("http://localhost:8000", {
+            const socket = io("https://chat-app-gph2.onrender.com/", {
                 query: {
                     userId: authUser.id,
                 },
