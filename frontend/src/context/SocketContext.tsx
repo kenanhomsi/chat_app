@@ -9,16 +9,13 @@ const SocketContext = createContext<SocketContextProps>({
     socket: null,
     onlineUsers: []
 })
-
 export const useSocketContext = () => {
     return useContext(SocketContext)
 }
-
 export const SocketContextProvider = ({ children }: { children: React.ReactNode }) => {
     const [socket, setSocket] = useState<Socket | null>(null);
     const [onlineUsers, setOnlineUsers] = useState([]);
     const { authUser } = useAuthContext();
-
     useEffect(() => {
         if (authUser) {
             const socket = io("https://chat-app-gph2.onrender.com/", {
@@ -26,14 +23,11 @@ export const SocketContextProvider = ({ children }: { children: React.ReactNode 
                     userId: authUser.id,
                 },
             });
-
             setSocket(socket);
-
             // socket.on() is used to listen to the events. can be used both on client and server side
             socket.on("getOnlineUsers", (users) => {
                 setOnlineUsers(users);
             });
-
             return () => {
                 socket.close();
             }
