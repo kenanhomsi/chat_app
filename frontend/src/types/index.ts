@@ -6,7 +6,18 @@ export interface signupProps {
   gender: string;
 }
 
+// export interface MessageProps {
+//   shouldShake?: boolean;
+//   createdAt: string;
+//   message: string;
+//   receiverId: string;
+//   senderId: string;
+//   updatedAt: string;
+//   _id: string;
+//   __v: number;
+// }
 export interface MessageProps {
+  shouldShake?: boolean;
   createdAt: string;
   message: string;
   receiverId: string;

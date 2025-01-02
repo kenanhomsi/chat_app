@@ -2,9 +2,10 @@ import { useEffect, useRef } from "react";
 import useGetMessages from "../hooks/useGetMessages"
 import Message from "./Message"
 import MessageSkeleton from "./skeleton/MessageSkeleton";
-
+import useListenMessages from "../hooks/useListenMessages";
 const Messages = () => {
     const { loading, messages } = useGetMessages();
+    useListenMessages();
     const lastMessageRef = useRef<HTMLDivElement | null>(null);
     useEffect(() => {
         setTimeout(() => {
@@ -25,8 +26,8 @@ const Messages = () => {
             }
             {!loading && messages.length > 0 &&
                 messages.map((ele, index) => {
-                    console.log(ele)
-                    return <div key={index} ref={lastMessageRef}>
+                    const isLastMessage = index === messages.length - 1
+                    return <div key={index} ref={isLastMessage ? lastMessageRef : null}>
                         <Message data={ele} />
                     </div>
                 })

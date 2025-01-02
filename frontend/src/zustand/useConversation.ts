@@ -1,5 +1,5 @@
-import { Types } from "mongoose";
 import { create } from "zustand";
+import { MessageProps } from "../types";
 export interface selectedConversationType {
   fullname: string;
   username: string;
@@ -14,8 +14,9 @@ interface ConversationState {
   setSelectedConversation: (
     selectedConversation: selectedConversationType | null
   ) => void;
-  messages: Types.ObjectId[];
-  setMessages: (messages: Types.ObjectId[]) => void;
+
+  messages: MessageProps[];
+  setMessages: (messages: MessageProps[]) => void;
 }
 const useConversation = create<ConversationState>((set) => ({
   selectedConversation: null,
@@ -23,6 +24,6 @@ const useConversation = create<ConversationState>((set) => ({
     selectedConversation: selectedConversationType | null
   ) => set({ selectedConversation }),
   messages: [],
-  setMessages: (messages: Types.ObjectId[]) => set({ messages }),
+  setMessages: (messages: MessageProps[]) => set({ messages }),
 }));
 export default useConversation;
